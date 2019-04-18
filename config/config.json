@@ -1,0 +1,17 @@
+[
+ {
+   "module": "dataloader",
+   "parameter": "root",
+   "value": ".."
+ },
+ {
+   "module": "dataloader",
+   "parameter": "inputdir",
+   "value": "unprocessed"
+ },
+ {
+   "module": "dataloader",
+   "parameter": "inputfile",
+   "value": "bank-additional-full.csv"
+ }
+]
