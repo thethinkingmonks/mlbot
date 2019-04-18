@@ -1,17 +1,17 @@
-[
- {
-   "module": "dataloader",
-   "parameter": "root",
-   "value": ".."
- },
- {
-   "module": "dataloader",
-   "parameter": "inputdir",
-   "value": "unprocessed"
- },
- {
-   "module": "dataloader",
-   "parameter": "inputfile",
-   "value": "bank-additional-full.csv"
- }
-]
+{
+  "preprocessing": {
+    "files": {
+      "root": "..",
+      "input": "unprocessed",
+      "filename":"bank-additional-full.csv",
+      "output": "output"
+    }
+  },
+  "eda": {
+    "files": {
+      "root": "..",
+      "input": "unprocessed",
+      "output": "output"
+    }
+  }
+}

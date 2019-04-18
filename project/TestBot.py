@@ -23,7 +23,7 @@ def create_logger():
         
         # define file handler and set formatter
         file_handler = logging.FileHandler(logfile)
-        formatter    = logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s')
+        formatter    = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s')
         file_handler.setFormatter(formatter)
         
         # add file handler to logger
@@ -34,8 +34,9 @@ def create_logger():
 def main():
     logger = create_logger()
     bot = MLBot.MLBot(logger)
-    preprocessor = Preprocessing.Preprocessing(logger)
     dataLoader = DataLoader.DataLoader(logger)
+    preprocessor = Preprocessing.Preprocessing(logger)
+    preprocessor.start_flow()
     
   
 if __name__ == '__main__':
