@@ -7,6 +7,7 @@ import os
 import MLBot
 import Preprocessing
 import DataLoader
+import univariant
 
 def create_logger():
     
@@ -33,10 +34,12 @@ def create_logger():
 
 def main():
     logger = create_logger()
-    bot = MLBot.MLBot(logger)
+    bot = MLBot.MLBot(logger)        
     dataLoader = DataLoader.DataLoader(logger)
     preprocessor = Preprocessing.Preprocessing(logger)
+    uni = univariant.univariant(logger)
     preprocessor.start_flow()
+    uni.start_flow()
     
   
 if __name__ == '__main__':

@@ -1,24 +1,16 @@
-# This Python 3 environment comes with many helpful analytics libraries installed
-# It is defined by the kaggle/python docker image: https://github.com/kaggle/docker-python
-# For example, here's several helpful packages to load in 
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import numpy as np 
+import pandas as pd 
 import pickle
 from scipy import stats
-
-# Input data files are available in the "../input/" directory.
-# For example, running this (by clicking run or pressing Shift+Enter) will list the files in the input directory
-
+import json
 import os
-print(os.listdir("../input"))
-
-# Any results you write to the current directory are saved as output.
-
-trainfile = "../input/train.csv"
 
 class univariant:
-    def __init__(self):
+    def __init__(self, logger):
+        self.logger = logger
         self.parameters = {}
         self.parameters['N'] = 0
         self.parameters['minimum'] = 0
@@ -38,10 +30,24 @@ class univariant:
         self.parameters['outlier_num'] = 0
         self.parameters['outlier_pos'] = []
         self.parameters['outlier_per'] = 0
-        self.parameters_count = 0        
-        self.df = pd.read_csv(trainfile)
+        self.parameters_count = 0
         with open('parameters.log', 'w') as parameters_file:
             pass
+        self.logger.info("Initialize preprocessing ...")
+        self.config = "../config/config.json"
+        
+    def read_config(self):
+        with open(self.config) as f:
+            data = json.load(f)
+        fileobj = data['preprocessing']['files']
+        self.inputfile = os.path.join(fileobj['root'],
+                                      fileobj['input'],
+                                      fileobj['filename'])
+        self.logger.info("input data file : {}".format(self.inputfile))
+
+    def load_data(self):
+        self.df = pd.read_csv(self.inputfile,sep=';')
+        
         
     
     def calculate_parameters(self, column):
@@ -103,54 +109,54 @@ class univariant:
             
     def dump_parameters(self):
         # Column
-        print("{0:<30} : {1}".format("Column", self.parameters['column']))
+        self.logger.info("{0:<30} : {1}".format("Column", self.parameters['column']))
         
         # Count 
-        print("{0:<30} : {1}".format("Count", self.parameters['N']))
+        self.logger.info("{0:<30} : {1}".format("Count", self.parameters['N']))
 
         # Minimum 
-        print("{0:<30} : {1:.2f}".format("Minimum", self.parameters['minimum']))
+        self.logger.info("{0:<30} : {1:.2f}".format("Minimum", self.parameters['minimum']))
 
         # Maximun        
-        print("{0:<30} : {1:.2f}".format("Maximum", self.parameters['maximum']))
+        self.logger.info("{0:<30} : {1:.2f}".format("Maximum", self.parameters['maximum']))
 
         # Mean        
-        print("{0:<30} : {1:.2f}".format("Mean", self.parameters['mean']))
+        self.logger.info("{0:<30} : {1:.2f}".format("Mean", self.parameters['mean']))
 
         # Median        
-        print("{0:<30} : {1:.2f}".format("Median", self.parameters['median']))
+        self.logger.info("{0:<30} : {1:.2f}".format("Median", self.parameters['median']))
 
         # Mode        
-        print("{0:<30} : {1}".format("Mode",[i for i in self.parameters['mode']]))
+        self.logger.info("{0:<30} : {1}".format("Mode",[i for i in self.parameters['mode']]))
 
         # Range        
-        print("{0:<30} : {1:.2f}".format("Range", self.parameters['range']))
+        self.logger.info("{0:<30} : {1:.2f}".format("Range", self.parameters['range']))
 
         # Variance         
-        print("{0:<30} : {1:.2f}".format("Variance", self.parameters['variance']))
+        self.logger.info("{0:<30} : {1:.2f}".format("Variance", self.parameters['variance']))
 
         # Standard Deviation        
-        print("{0:<30} : {1:.2f}".format("Standard Deviation", self.parameters['std']))
+        self.logger.info("{0:<30} : {1:.2f}".format("Standard Deviation", self.parameters['std']))
 
         # Quantiles
-        print("{0:<30} : {1}".format("Quantile", [i for i in self.parameters['quantile']]))
+        self.logger.info("{0:<30} : {1}".format("Quantile", [i for i in self.parameters['quantile']]))
         
         # Coefficient of Deviation        
-        print("{0:<30} : {1:.2f}".format("Coefficient of Deviation", self.parameters['ced']))
+        self.logger.info("{0:<30} : {1:.2f}".format("Coefficient of Deviation", self.parameters['ced']))
 
         # Skewness        
-        print("{0:<30} : {1:.2f}".format("Skewness", self.parameters['skew']))
+        self.logger.info("{0:<30} : {1:.2f}".format("Skewness", self.parameters['skew']))
 
         # Kurtosis        
-        print("{0:<30} : {1:.2f}".format("Kurtosis", self.parameters['kurtosis']))
+        self.logger.info("{0:<30} : {1:.2f}".format("Kurtosis", self.parameters['kurtosis']))
         
         # Z-Score
-        print("{0:<30} : {1}".format("Z-Score", str(self.parameters['zscore'])))
+        self.logger.info("{0:<30} : {1}".format("Z-Score", str(self.parameters['zscore'])))
         
         # Number of Outliers
-        print("{0:<30} : {1}".format("Number of Outliers", self.parameters['outlier_num']))
-        print("{0:<30} : {1}".format("Position of Outliers", self.parameters['outlier_pos']))       
-        print("{0:<30} : {1}".format("Percentage of Outliers", self.parameters['outlier_per']*100))
+        self.logger.info("{0:<30} : {1}".format("Number of Outliers", self.parameters['outlier_num']))
+        self.logger.info("{0:<30} : {1}".format("Position of Outliers", self.parameters['outlier_pos']))       
+        self.logger.info("{0:<30} : {1}".format("Percentage of Outliers", self.parameters['outlier_per']*100))
         
         
     def save_parameters(self):
@@ -158,26 +164,20 @@ class univariant:
             pickle.dump(self.parameters, parameters_file)
             
     def read_all_parameters(self):
-        print("parameter count : {}".format(self.parameters_count))
+        self.logger.info("parameter count : {}".format(self.parameters_count))
         with open('parameters.log', 'rb') as parameters_file:
             for i in range(self.parameters_count):
-                print("paramters : {}".format(i))
+                self.logger.info("paramters : {}".format(i))
                 param = pickle.load(parameters_file)
-                print(param)
+                self.logger.info(param)
             
         
     def start_flow(self):
+        self.read_config()
+        self.load_data()
         for column in self.df.select_dtypes(include=[np.number]).columns:
-            print("{0:*^20}".format(column))
+            self.logger.info("{0:*^20}".format(column))
             self.calculate_parameters(column)
             self.dump_parameters()
             self.save_parameters()
         self.read_all_parameters()
-        
-        
-def main():
-    uni = univariant()
-    uni.start_flow()
-    
-if __name__ == '__main__':
-    main()
