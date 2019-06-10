@@ -2,15 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np 
-import pandas as pd 
 import pickle
 from scipy import stats
-import json
-import os
 
-class univariant:
-    def __init__(self, logger):
-        self.logger = logger
+class botunivariant:
+    def __init__(self, bot):
+        self.logger = bot["logger"]
+        self.config = bot["config"]
+        self.dataloader = bot["dataloader"]
         self.parameters = {}
         self.parameters['N'] = 0
         self.parameters['minimum'] = 0
@@ -31,24 +30,13 @@ class univariant:
         self.parameters['outlier_pos'] = []
         self.parameters['outlier_per'] = 0
         self.parameters_count = 0
+        self.sep = ','
         with open('parameters.log', 'w') as parameters_file:
             pass
-        self.logger.info("Initialize preprocessing ...")
-        self.config = "../config/config.json"
+        self.logger.info("Initialize preprocessing ...")        
         
-    def read_config(self):
-        with open(self.config) as f:
-            data = json.load(f)
-        fileobj = data['preprocessing']['files']
-        self.inputfile = os.path.join(fileobj['root'],
-                                      fileobj['input'],
-                                      fileobj['filename'])
-        self.logger.info("input data file : {}".format(self.inputfile))
-
     def load_data(self):
-        self.df = pd.read_csv(self.inputfile,sep=';')
-        
-        
+        self.df = self.dataloader.get_dataframe()        
     
     def calculate_parameters(self, column):
         # Column
@@ -173,7 +161,6 @@ class univariant:
             
         
     def start_flow(self):
-        self.read_config()
         self.load_data()
         for column in self.df.select_dtypes(include=[np.number]).columns:
             self.logger.info("{0:*^20}".format(column))
