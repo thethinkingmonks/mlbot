@@ -1,16 +1,18 @@
 {
-  "preprocessing": {
+  "config": {
     "files": {
       "root": "..",
-      "input": "unprocessed",
-      "filename":"bank-additional-full.csv",
-      "output": "output"
+      "input_folder": "unprocessed",
+      "input_file": "clv.csv",
+      "output_folder": "output",
+	  "output_file": "output.txt",
+	  "separator": ","
     }
   },
   "eda": {
     "files": {
       "root": "..",
-      "input": "unprocessed",
+      "input_folder": "unprocessed",
       "output": "output"
     }
   }
