@@ -33,12 +33,14 @@ class botunivariant:
         self.sep = ','
         with open('parameters.log', 'w') as parameters_file:
             pass
-        self.logger.info("Initialize preprocessing ...")        
+        self.logger.info("botunivariant - init ...")        
         
     def load_data(self):
+        self.logger.info("botunivariant - load_data ...")        
         self.df = self.dataloader.get_dataframe()        
     
     def calculate_parameters(self, column):
+        self.logger.info("botunivariant - calculate_parameters ...")        
         # Column
         self.parameters['column'] = column
         
@@ -96,6 +98,7 @@ class botunivariant:
 
             
     def dump_parameters(self):
+        self.logger.info("botunivariant - dump_parameters ...")
         # Column
         self.logger.info("{0:<30} : {1}".format("Column", self.parameters['column']))
         
@@ -143,15 +146,17 @@ class botunivariant:
         
         # Number of Outliers
         self.logger.info("{0:<30} : {1}".format("Number of Outliers", self.parameters['outlier_num']))
-        self.logger.info("{0:<30} : {1}".format("Position of Outliers", self.parameters['outlier_pos']))       
+        #self.logger.info("{0:<30} : {1}".format("Position of Outliers", self.parameters['outlier_pos']))       
         self.logger.info("{0:<30} : {1}".format("Percentage of Outliers", self.parameters['outlier_per']*100))
         
         
     def save_parameters(self):
+        self.logger.info("botunivariant - save_parameters ...")
         with open('parameters.log', 'ab') as parameters_file:
             pickle.dump(self.parameters, parameters_file)
             
     def read_all_parameters(self):
+        self.logger.info("botunivariant - read_all_parameters ...")
         self.logger.info("parameter count : {}".format(self.parameters_count))
         with open('parameters.log', 'rb') as parameters_file:
             for i in range(self.parameters_count):
@@ -161,10 +166,11 @@ class botunivariant:
             
         
     def start_flow(self):
+        self.logger.info("botunivariant - start_flow ...")
         self.load_data()
         for column in self.df.select_dtypes(include=[np.number]).columns:
             self.logger.info("{0:*^20}".format(column))
             self.calculate_parameters(column)
             self.dump_parameters()
-            self.save_parameters()
-        self.read_all_parameters()
+            #self.save_parameters()
+        #self.read_all_parameters()
