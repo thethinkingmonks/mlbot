@@ -3,7 +3,7 @@
     "files": {
       "root": "..",
       "input_folder": "unprocessed",
-      "input_file": "clv.csv",
+      "input_file": "NFL.csv",
       "output_folder": "output",
 	  "output_file": "output.txt",
 	  "separator": ","
