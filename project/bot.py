@@ -15,6 +15,8 @@ class bot():
         self.bot = {}
         # create the logger file
         self.bot["logger"] = self.create_logger()
+        self.logger = self.bot["logger"]
+        self.logger.info("bot - init ...")
         
     def create_logger(self):        
         logfile = 'logfile.log'
@@ -30,16 +32,24 @@ class bot():
             
             # define file handler and set formatter
             file_handler = logging.FileHandler(logfile)
+            #formatter    = logging.Formatter('[%(filename)s:%(lineno)s - %(funcName)20s() ] %(asctime)s : %(levelname)s : %(message)s')
             formatter    = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s')
             file_handler.setFormatter(formatter)
             
             # add file handler to logger
             logger.addHandler(file_handler)
             
-        return logger    
+        return logger  
+    
+    def close_logger(self):
+        self.logger.info("bot - close_logger ...")
+        handlers = self.bot["logger"].handlers[:]
+        for handler in handlers:
+            handler.close()
+        self.bot["logger"].removeHandler(handler)        
     
     def bot_create(self):       
-        
+        self.logger.info("bot - bot_create ...")
         # initialize all the configration parameters
         self.bot["config"] = botconfig.botconfig(self.bot)
         self.bot["config"].start_flow()
@@ -50,13 +60,15 @@ class bot():
         self.bot["plot"] = botplot.botplot(self.bot)
         
     def bot_load(self):
-        pass
+        self.logger.info("bot - bot_load ...")
         
     def bot_run(self):
+        self.logger.info("bot - bot_run ...")
         self.bot["dataloader"].start_flow()
         self.bot["preprocess"].start_flow()
-        self.bot["univariant"].start_flow()
+        #self.bot["univariant"].start_flow()
         self.bot["plot"].start_flow()
+        self.close_logger()
 
 def main():
     mybot = bot()
