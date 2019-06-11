@@ -5,7 +5,7 @@ import json
 class botconfig():
     def __init__(self, bot):
         self.logger = bot["logger"]
-        self.logger.info("Initialize MLPlot ...")
+        self.logger.info("botconfig - init ...")
         self.configfile = "../config/config.json"
         # configuration parameters
         self.config = {}
@@ -14,6 +14,7 @@ class botconfig():
         self.config["separator"] = ""        
         
     def read_config(self):
+        self.logger.info("botconfig - read_config ...")
         with open(self.configfile) as f:
             data = json.load(f)
         parameter = data['config']['files']
@@ -24,10 +25,11 @@ class botconfig():
                                       parameter['output_folder'],
                                       parameter['output_file'])
         
-        self.config['separator'] = parameter['separator']
+        self.config['separator'] = parameter['separator']        
         self.logger.info("input file name : {}".format(self.config["input_file"]))
-        self.logger.info("input data file : {}".format(self.config["input_file"]))
+        
         
     def start_flow(self):
+        self.logger.info("botconfig - start_flow ...")
         self.read_config()   
         
