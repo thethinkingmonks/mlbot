@@ -1,0 +1,22 @@
+{
+  "config": {
+    "files": {
+      "root": "..",
+      "input_folder": "input",
+      "input_file": "nfl.csv",
+      "output_folder": "output",
+	  "output_file": "output.txt",
+	  "log_file": "bot.log",
+	  "params_file": "params.pkl",
+    "data_file": "data.pkl",
+	  "separator": ","
+    }
+  },
+  "eda": {
+    "files": {
+      "root": "..",
+      "input_folder": "input",
+      "output": "output"
+    }
+  }
+}
