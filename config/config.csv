@@ -1,4 +1,0 @@
-module,parameter,value
-dataloader,root,..
-dataloader,inputdir,unprocessed
-dataloader,inputfile,bank-additional-full.csv
